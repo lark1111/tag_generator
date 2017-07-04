@@ -1,0 +1,382 @@
+
+/**
+ * Created by airghc on 2017/4/10.
+ */
+ Vue.config.debug = true;// 开启vue 调试功能
+
+    new Vue({
+        el: '#app',
+        data: {
+            basic_info: [],
+            image_info: [],
+            image_size: [],
+            lines: [],
+            flag: 0,
+            canvas_width: 1000,
+            canvas_height: 80,
+            target: 0,
+            content: '',
+        },
+        methods: {
+            addPic: function (e) {
+                e.preventDefault();
+                $('input[type=file]').trigger('click');
+                return false;
+            },
+            onFileChange: function (e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)return;
+                this.createImage(files);
+            },
+            // to2len: function (table) {
+            //     var
+            //
+            // }
+            createImage: function (file) {
+                if (typeof FileReader === 'undefined') {
+                    alert('您的浏览器不支持图片上传，请升级您的浏览器');
+                    return false;
+                }
+                var image = new Image();
+                var vm = this;
+                var leng = file.length;
+                var i = 0
+                var func = function(){
+                    if(i>=leng){
+                        return;
+                    }
+                    var info = {}
+                    info.name = file[i].name
+                    vm.basic_info.push(info)
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        image.src = e.target.result;
+                        vm.image_info.push(e.target.result);
+                        i++
+                        // console.log(vm.basic_info, vm.image_info)
+                        func()
+                    };
+                    reader.readAsDataURL(file[i]);
+                }
+                func()
+                // for (var i=0; i<leng; i++) {
+                //     var info = {};
+                //     info.name = file[i].name;
+                //     vm.basic_info.push(info);
+                //     var reader = new FileReader();
+                //     reader.onload = function (e) {
+                //         reader.readAsDataURL(file[i]);
+                //         image.src = e.target.result;
+                //         vm.image_info.push(e.target.result);
+                //     };
+                // }
+            },
+            delImage: function (index) {
+                this.image_info.splice(index, 1);
+                this.basic_info.splice(index, 1);
+                // console.log(this.target, this.basic_info[this.target].name)
+                this.showcanvas(1)
+            },
+            removeImage: function (e) {
+                this.image_info = [];
+                this.basic_info = [];
+                this.lines = [];
+                this.content = '';
+                this.target = 0;
+                this.showcanvas(0);
+            },
+            startMark: function () {
+                this.showcanvas(1)
+            },
+            showcanvas: function (type) {
+                var vm = this
+                // console.log( vm.target, vm.line_tags)
+                // console.log(content)
+                if (vm.basic_info.length) {
+                    var canvas = document.getElementById('canvas');
+                    var context = canvas.getContext('2d');
+                    var image = new Image();
+                    image.src = vm.image_info[vm.target];
+                    if(image.width>500){
+                        vm.flag = 1
+                        // vm.canvas_width = image.width
+                    } else{
+                        vm.flag = 0
+                        // vm.canvas_width = image.width*2
+                    }
+                    canvas.height = vm.canvas_height;
+                    canvas.width = vm.canvas_width;
+                    image.onload = function() {
+                        if(vm.flag == 0){
+                            context.drawImage(image, 0, 0, image.width*2, image.height*2)
+                        } else {
+                            context.drawImage(image, 0, 0, image.width, image.height*2)
+                        }
+                        vm.reviewtag()
+                    }
+                    if(type==1){
+                         vm.fetchinfo(vm.basic_info[vm.target].name);
+                    }
+                    canvas.onmouseup = function (e) {
+                        e.preventDefault()
+                        var pointx = e.offsetX +2
+                        // console.log(e.offsetX, e.offsetY)
+                        //var point = vm.windowtocanvas(e.clientX, e.clientY)
+                        // console.log(point)
+                        var lastpoint = vm.lines[vm.lines.length-1]
+                        // console.log(pointx, lastpoint)
+                        if (lastpoint != pointx) {
+                            vm.lines.push(pointx)
+                        }
+                        vm.reviewtag()
+                        //line.end = point.x
+                        // vm.line_tags.push(line)
+                        vm.drawone(pointx)
+                        // console.log(vm.line_tags)
+                    };
+                }
+                else {
+                    var canvas = document.getElementById('canvas');
+                    var context = canvas.getContext('2d');
+                    var image = new Image();
+                    canvas.height = vm.canvas_height;
+                    canvas.width = vm.canvas_width;
+                    image.src = vm.image_info[vm.target];
+                    image.onload = function() {
+                        context.drawImage(image, 0, 0, image.width*2, image.height*2)
+                        vm.reviewtag()
+                    }
+
+                }
+            },
+            windowtocanvas: function (x, y){
+                var bbpx = canvas.getBoundingClientRect()
+                return {x: x-bbpx.left, y: y-bbpx.top}
+            },
+            drawbuttom: function (lines){
+                var vm = this
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                var i = 0
+                while(i<vm.lines.length -1){
+                    context.moveTo(lines[i], 80)
+                    context.lineTo(lines[i+1], 80)
+                    context.moveTo(lines[i], 0)
+                    context.lineTo(lines[i+1], 0)
+                    context.lineWidth = 2
+                    context.strokeStyle = "rgb(187, 27, 57)"
+                    context.stroke()
+                    i = i+2
+                }
+            },
+            drawtext: function (lines) {
+                var vm = this
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                context.font = '20px serif'
+                var i = 0
+                while(i<vm.lines.length-1){
+                    context.fillText(i/2, lines[i],20)
+                    i=i+2
+                }
+            },
+            drawlines: function(lines){
+                var vm = this
+                // console.log(this.line_tags)
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                // var lines = this.line_tags
+                var i = 0
+                while(i<vm.lines.length){
+                    context.moveTo(lines[i], 0)
+                    context.lineTo(lines[i], 80)
+                    // context.moveTo(lines[i+1], 0)
+                    // context.lineTo(lines[i+1], 80)
+                    context.lineWidth = 1
+                    context.strokeStyle = "rgb(187, 27, 57)"
+                    context.stroke()
+                    i = i+1
+                }
+                // for(var i =0;i< lines.length-1; i = i+2){
+                //     // var end = line['end']
+                //     context.moveTo(lines[i], 0)
+                //     context.lineTo(lines[i], 80)
+                //     context.lineWidth = 1
+                //     context.strokeStyle = "rgb(187, 27, 57)"
+                //     // context.stroke()
+                //     context.moveTo(lines[i+1], 0)
+                //     context.lineTo(lines[i+1], 80)
+                //     context.lineWidth = 1
+                //     context.strokeStyle = "rgb(31, 193, 21)"
+                //     context.stroke()
+                // }
+            },
+            drawone: function(line){
+                var vm = this
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                context.moveTo(line, 0)
+                context.lineTo(line, 80)
+                context.lineWidth = 1
+                context.strokeStyle = "rgb(236, 12, 87)"
+                context.stroke()
+            },
+            submittag: function(){
+
+                var vm =this
+                var selectedColor = $('#color input:radio:checked').val();
+                console.log(selectedColor)
+                if(selectedColor && selectedColor != vm.content){
+                    vm.content = selectedColor
+                }
+                var content = vm.content
+                var real_line = []
+                // console.log(vm.lines)
+                if(vm.flag == 0){
+                    for(var i in vm.lines){
+                    // console.log(i)
+                    var j = Math.round(vm.lines[i]/2)
+                    real_line.push(j)
+                    // console.log(real_line)
+                    }
+                } else {
+                    for(var i in vm.lines){
+                    // console.log(i)
+                    var j = Math.round(vm.lines[i])
+                    real_line.push(j)
+                    // console.log(real_line)
+                    }
+                }
+                if(real_line.length%2 ==1){
+                    alert('标记线数目为奇数，请重新校验')
+                } else {
+                    var info = {
+                    'lines': real_line,
+                    'name': vm.basic_info[vm.target].name,
+                    'content': content
+                    }
+                    var obj = JSON.stringify(info);
+                    $.ajax({
+                        type: 'post',
+                        url: "/mark/addmark",
+                        data: obj,
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status == 200) {
+                                // alert('提交成功！')
+                                // vm.showcanvas(1)
+                                vm.nextpic()
+                            }
+                        },
+                        error: function (jqXHR) {
+                            alert(JSON.stringify(jqXHR))
+                        }
+                    });
+                }
+            },
+            removetag: function(e){
+                this.lines = [];
+                this.content = '';
+                this.showcanvas(0);
+                this.showinfo();
+                // console.log(this.target, this.basic_info[this.target].name)
+            },
+            lastpic: function(){
+                var vm = this;
+                vm.content = '';
+                vm.lines = [];
+                if(vm.target >0) {
+                    vm.target = vm.target -1;
+                    // console.log(vm.target, vm.basic_info[vm.target].name)
+                    vm.showcanvas(1);
+                }
+
+            },
+            nextpic: function(){
+                var vm = this
+                vm.content = '';
+                vm.lines = []
+                if(vm.target <vm.basic_info.length-1) {
+                    vm.target = vm.target +1
+                    // console.log(vm.target, vm.basic_info[vm.target].name)
+                    vm.showcanvas(1)
+                } else {
+                    alert('已经到最后一张了')
+                }
+
+            },
+            backtag: function() {
+                vm = this
+                // lines = this.lines
+                vm.lines.pop()
+                // console.log(this.lines)
+                vm.showcanvas(0)
+                // vm.drawbuttom(vm.lines)
+                // vm.drawtext(vm.lines)
+                // vm.showinfo()
+                // console.log(this.lines)
+                // this.drawlines(lines)
+                //this.drawlines(this.line_tags)
+            },
+            fetchinfo: function(name) {
+                var vm =this;
+                // console.log(name)
+                var info = JSON.stringify({'name': name})
+                $.ajax({
+                    type: 'post',
+                    url: "/mark/confirm",
+                    data: info,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status == 200) {
+                            if(data.info.lines) {
+                                var real_line = []
+                                if(vm.flag == 0){
+                                    for (var i in data.info.lines) {
+                                        // console.log(data.info.lines)
+                                        var j = data.info.lines[i] * 2
+                                        real_line.push(j)
+                                        // console.log(real_line)
+                                    }
+                                } else {
+                                    for (var i in data.info.lines) {
+                                        // console.log(data.info.lines)
+                                        var j = data.info.lines[i]
+                                        real_line.push(j)
+                                        // console.log(real_line)
+                                    }
+                                }
+
+                                vm.lines = real_line
+                            }
+                            if(data.info){
+                                vm.content = data.info.content
+                                // console.log(vm.lines)
+                            }
+                            vm.drawlines(vm.lines)
+                            vm.drawbuttom(vm.lines)
+                            vm.drawtext(vm.lines)
+                            vm.showinfo()
+                        }
+                    },
+                    error: function (jqXHR) {
+                        alert(JSON.stringify(jqXHR))
+                    }
+                });
+            },
+            showinfo: function() {
+                document.getElementById('input_content').value = this.content;
+
+            },
+            reviewtag: function(){
+                var vm =this
+                vm.drawlines(vm.lines)
+                vm.drawbuttom(vm.lines)
+                vm.drawtext(vm.lines)
+                vm.showinfo()
+}
+
+        }
+    })

@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Tag Generator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/blog.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+  <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Tag Generator</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Mark Tag</a></li>
+            <li><a href="/pic">Pic Tag</a></li>
+            <li class="active"><a href="/doc">Documents</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-12 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">User Guide</h2>
+            <p class="blog-post-meta">April 16, 2017 by <a href="http://airghc.gtensor.com">Airghc</a></p>
+            <h3>上传图片</h3>
+            <hr>
+            <p>首先点击左侧<strong>添加图片</strong>链接，会弹出本地文件管理器，打开本地图片目录，本程序可同时上传
+                多张图片，可使用快捷键<strong>CTRL + A</strong>选中某文件夹下全部图片，上传。上传成功后在页面左侧会
+                呈现图片的缩略图。</p>
+            <blockquote>
+              <p><strong>说明：</strong> 为节约服务器存储空间并提高访问速度，此时并不会将数据上传到服务器</p>
+            </blockquote>
+            <p>上传成功后，左侧出现缩略图，右侧是我们的标签生成区域，在右上角长条画布上展示的是缩略图列表中的第一张图片
+                ，图片宽度放大3倍，高度放大2倍。</p>
+            <p>此时在左侧可以选择移除所有图片，或者点击某个特定的图片即可移除该图片。</p>
+            <h3>标记</h3>
+              <hr>
+            <p>
+                可支持单独输入标注，输入标注后点击单独提交标注即可只提交标注，点击全部提交即为提交全部内容。包括分割线和标签。
+            </p>
+            <p>使用鼠标移动到图片初始位置确认标记点后点击左键，点击后会在该位置画出一条标记线，然后从左到右的顺序依次画出
+            标记线，要注意：<strong>标记线的数目是标记字符数目的2倍</strong></p>
+              <p>
+                画好标记线后，可以点击预览标记查看标记线情况，方便与输入的标签对应。
+            </p>
+            <p>标线画完后，在下面两个输入栏分别输入标线所对应的标签，和该图片的描述文字，完成后点击提交即可完成标记。</p>
+              <p>
+                如果添加图片后不显示内容，刷新页面活点击首页Tag Generator按钮即可。
+            </p>
+            <blockquote>
+              <p><strong>说明：</strong> 重新查看已经标记过的图片时，会查询服务器该图片的相关标记情况，并在页面中给予显示，
+              我们可以对已有的标记进行修改，方法同上面说明。</p>
+            </blockquote>
+              <p>如有关于程序BUG信息或其他事务，请联系邮箱：airghc@163.com</p>
+          </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>
