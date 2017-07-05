@@ -222,13 +222,7 @@
                 context.stroke()
             },
             submittag: function(){
-
                 var vm =this
-                var selectedColor = $('#color input:radio:checked').val();
-                console.log(selectedColor)
-                if(selectedColor && selectedColor != vm.content){
-                    vm.content = selectedColor
-                }
                 var content = vm.content
                 var real_line = []
                 // console.log(vm.lines)
@@ -369,6 +363,18 @@
             showinfo: function() {
                 document.getElementById('input_content').value = this.content;
 
+            },
+            setenglish: function(){
+                this.content = '1'
+                this.showinfo()
+            },
+            setnormal: function(){
+                this.content = '2'
+                this.showinfo()
+            },
+            seterr: function(){
+                this.content = '0'
+                this.showinfo()
             },
             reviewtag: function(){
                 var vm =this

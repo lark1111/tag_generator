@@ -18,12 +18,19 @@
     <!-- Custom styles for this template -->
 {#    <link href="/static/css/blog.css" rel="stylesheet">#}
       <style type="text/css">
+          .pager{
+              text-align: left;
+          }
+          .form-control-mine {
+            width:300px;
+            display:inline;
+        }
         nav {
             font-family: Georgia, "Times New Roman", Times, serif;
             color: #555;
         }
         ul { list-style: none outside none; margin:0; padding: 0; }
-        li { margin: 0 5px; display: inline; }
+        li { margin: 0px 5px; display: inline; }
         #app{
           overflow: hidden;
           text-align: center;
@@ -111,30 +118,14 @@
 {#                                        <label for="input_des_en">请输入行驶证英文条目标注</label>#}
 {#                                        <input type="text" class="form-control" id="input_des_en" placeholder="行驶证条目英文标注" style="margin:10px;">#}
 {#                                    </li>#}
-                                    <li>
-                                        <label for="input_des_content">请输入行驶证内容类别</label>
-                                        <input type="text" class="form-control" id="input_content" placeholder="行驶证内容类别" style="margin:10px;" disabled="disabled">
-
-                                    </li>
-                                    <li>
-                                        <div class="radio checkbox-inline">
-                                            <label>
-                                              <input type="radio" name="options" id="optionsRadios1" value="0" checked>
-                                              0
-                                            </label>
-                                        </div>
-                                        <div class="radio checkbox-inline">
-                                            <label>
-                                              <input type="radio" name="options" id="optionsRadios2" value="1">
-                                              1
-                                            </label>
-                                        </div>
-                                        <div class="radio checkbox-inline">
-                                            <label>
-                                              <input type="radio" name="options" id="optionsRadios2" value="2">
-                                              2
-                                            </label>
-                                        </div>
+                                    <li >
+                                        <p >
+                                            <label for="input_des_content">当前行驶证内容类别:</label>
+                                            <input type="text" class="form-control form-control-mine" id="input_content" style="margin:10px;" disabled="disabled">
+                                            <button class="btn btn-large btn-warning" type="button" @click="seterr">异常条目</button>
+                                            <button class="btn btn-large btn-info" type="button" @click="setenglish">英文条目</button>
+                                            <button class="btn btn-large btn-success" type="button" @click="setnormal">正常条目</button>
+                                        </p>
                                     </li>
                                     <li ><a  @click="lastpic" >上一页</a></li>
                                     <li ><a  @click="nextpic" >下一页</a></li>
