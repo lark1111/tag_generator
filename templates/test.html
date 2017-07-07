@@ -98,7 +98,7 @@
                 <div class="col-md-offset-1 col-md-9">
                     <div class="card">
                       <div class="card-content">
-                        <canvas id="canvas" style="cursor:pointer; height:80px; width:1000px;display: block; border: 2px solid #A9F"></canvas>
+                        <canvas id="canvas" style="cursor:text; height:80px; width:1000px;display: block; border: 2px solid #A9F"></canvas>
                       </div>
                       <div class="card-action">
                         <!-- Graph parameter selector1 -->
@@ -121,18 +121,26 @@
                                     <li >
                                         <p >
                                             <label for="input_des_content">当前行驶证内容类别:</label>
-                                            <input type="text" class="form-control form-control-mine" id="input_content" style="margin:10px;" disabled="disabled">
-                                            <button class="btn btn-large btn-warning" type="button" @click="seterr">异常条目</button>
-                                            <button class="btn btn-large btn-info" type="button" @click="setenglish">英文条目</button>
-                                            <button class="btn btn-large btn-success" type="button" @click="setnormal">正常条目</button>
+                                            <input type="text" class="form-control form-control-mine" id="input_content" style="" disabled="disabled">
                                         </p>
                                     </li>
-                                    <li ><a  @click="lastpic" >上一页</a></li>
-                                    <li ><a  @click="nextpic" >下一页</a></li>
-                                    <li ><a  @click="submittag" >提交当前图片标签</a></li>
+                                    <p >
+                                        <button class="btn btn-large btn-warning" type="button" @click="seterr" style="margin:5px 2px;">异常条目</button>
+                                    <button class="btn btn-large btn-info" type="button" @click="setenglish" style="margin:5px 2px;">英文条目</button>
+                                    <button class="btn btn-large btn-success" type="button" @click="setnormal" style="margin:5px 2px;">正常条目</button>
+                                    </p>
+                                    <p style="margin:10px;">
+                                        <li ><a  @click="submittag" style="margin:5px 5px 2px 150px ;">提交当前图片标签</a></li>
+                                        <li ><a  @click="backtag" style="margin:5px 2px;">撤销标记</a></li>
+                                    </p>
+
+
+                                    <li ><a  @click="lastpic" style="margin:5px 2px;">上一页</a></li>
+                                    <li ><a  @click="nextpic" style="margin:5px 2px;">下一页</a></li>
+
 {#                                    <li ><a  @click="reviewtag" >预览标记</a></li>#}
-                                    <li ><a  @click="removetag" >清除标记</a></li>
-                                    <li ><a  @click="backtag" >撤销标记</a></li>
+                                    <li ><a  @click="removetag" style="margin:5px 2px;">清除标记</a></li>
+
 {#                                    <li ><a  @click="rollback" >撤销</a></li>#}
                                 </ul>
                             </li>

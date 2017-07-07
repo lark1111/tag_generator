@@ -12,7 +12,7 @@
             image_size: [],
             lines: [],
             flag: 0,
-            canvas_width: 1000,
+            canvas_width: 1600,
             canvas_height: 80,
             target: 0,
             content: '',
@@ -97,7 +97,8 @@
                     var context = canvas.getContext('2d');
                     var image = new Image();
                     image.src = vm.image_info[vm.target];
-                    if(image.width>500){
+                    console.log(image.width)
+                    if(image.width>800){
                         vm.flag = 1
                         // vm.canvas_width = image.width
                     } else{
@@ -119,7 +120,7 @@
                     }
                     canvas.onmouseup = function (e) {
                         e.preventDefault()
-                        var pointx = e.offsetX +2
+                        var pointx = (e.offsetX +2)*1.6
                         // console.log(e.offsetX, e.offsetY)
                         //var point = vm.windowtocanvas(e.clientX, e.clientY)
                         // console.log(point)
@@ -224,49 +225,91 @@
             submittag: function(){
                 var vm =this
                 var content = vm.content
-                var real_line = []
-                // console.log(vm.lines)
-                if(vm.flag == 0){
-                    for(var i in vm.lines){
-                    // console.log(i)
-                    var j = Math.round(vm.lines[i]/2)
-                    real_line.push(j)
-                    // console.log(real_line)
-                    }
-                } else {
-                    for(var i in vm.lines){
-                    // console.log(i)
-                    var j = Math.round(vm.lines[i])
-                    real_line.push(j)
-                    // console.log(real_line)
-                    }
-                }
-                if(real_line.length%2 ==1){
-                    alert('标记线数目为奇数，请重新校验')
-                } else {
-                    var info = {
-                    'lines': real_line,
-                    'name': vm.basic_info[vm.target].name,
-                    'content': content
-                    }
-                    var obj = JSON.stringify(info);
-                    $.ajax({
-                        type: 'post',
-                        url: "/mark/addmark",
-                        data: obj,
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function (data) {
-                            if (data.status == 200) {
-                                // alert('提交成功！')
-                                // vm.showcanvas(1)
-                                vm.nextpic()
+                // console.log(content)
+                if (content) {
+                    if(content == '2'){
+                        var real_line = []
+                        // console.log(vm.lines)
+                        if(vm.flag == 0){
+                            for(var i in vm.lines){
+                            // console.log(i)
+                            var j = Math.round(vm.lines[i]/2)
+                            real_line.push(j)
+                            // console.log(real_line)
                             }
-                        },
-                        error: function (jqXHR) {
-                            alert(JSON.stringify(jqXHR))
+                        } else {
+                            for(var i in vm.lines){
+                            // console.log(i)
+                            var j = Math.round(vm.lines[i])
+                            real_line.push(j)
+                            // console.log(real_line)
+                            }
                         }
-                    });
+                        if(real_line.length%2 ==1){
+                            alert('标记线数目为奇数，请重新校验')
+                        } else if(real_line.length ==0){
+                            alert('标记线为空，请重新校验')
+                        } else {
+                            var info = {
+                            'lines': real_line,
+                            'name': vm.basic_info[vm.target].name,
+                            'content': content
+                            }
+                            var obj = JSON.stringify(info);
+                            $.ajax({
+                                type: 'post',
+                                url: "/mark/addmark",
+                                data: obj,
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.status == 200) {
+                                        // alert('提交成功！')
+                                        // vm.showcanvas(1)
+                                        vm.nextpic()
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert(JSON.stringify(jqXHR))
+                                }
+                            });
+                        }
+
+                    }
+                    else if (content == '0' || content == '1'){
+                        if(vm.lines.length>0){
+                            alert('此类别不应出现标签，请重新检查')
+                        } else{
+                            var info = {
+                            'lines': [],
+                            'name': vm.basic_info[vm.target].name,
+                            'content': content
+                            }
+                            var obj = JSON.stringify(info);
+                            $.ajax({
+                                type: 'post',
+                                url: "/mark/addmark",
+                                data: obj,
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.status == 200) {
+                                        // alert('提交成功！')
+                                        // vm.showcanvas(1)
+                                        vm.nextpic()
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert(JSON.stringify(jqXHR))
+                                }
+                            });
+                        }
+                    } else {
+                        alert('条目类别不存在，请重新检查')
+                    }
+                    }
+                else{
+                    alert('条目信息为空，请重新检查')
                 }
             },
             removetag: function(e){
@@ -330,14 +373,14 @@
                                 if(vm.flag == 0){
                                     for (var i in data.info.lines) {
                                         // console.log(data.info.lines)
-                                        var j = data.info.lines[i] * 2
+                                        var j = (data.info.lines[i] * 2)
                                         real_line.push(j)
                                         // console.log(real_line)
                                     }
                                 } else {
                                     for (var i in data.info.lines) {
                                         // console.log(data.info.lines)
-                                        var j = data.info.lines[i]
+                                        var j = (data.info.lines[i])
                                         real_line.push(j)
                                         // console.log(real_line)
                                     }
