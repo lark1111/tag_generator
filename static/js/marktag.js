@@ -30,7 +30,6 @@
             },
             // to2len: function (table) {
             //     var
-            //
             // }
             createImage: function (file) {
                 if (typeof FileReader === 'undefined') {
